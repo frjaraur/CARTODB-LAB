@@ -48,8 +48,8 @@ case $ACTION in
 	setup)
 		FirstRun
 		/usr/sbin/slapd -h "ldap:///" -u openldap -g openldap -d 0
-				
 		Setup
+
 	;;	
 	
 	recreatedb)
