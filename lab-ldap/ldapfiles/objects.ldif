@@ -1,0 +1,35 @@
+#Top Level of Domain
+#dn: dc=cartodb,dc=com
+#objectClass: top
+#objectClass: dcObject
+#objectclass: organization
+#o: CartoDB
+#dc: cartodb
+#description: CartoDB Users
+
+#Admin user
+#dn: cn=admin,dc=cartodb,dc=com
+#objectClass: simpleSecurityObject
+#objectClass: organizationalRole
+#cn: admin
+#description: LDAP administrator
+#userPassword: changeme 
+
+#Users Level
+dn: ou=users,dc=cartodb,dc=com
+objectClass: organizationalUnit
+ou: users 
+
+#Group Level
+dn: ou=groups,dc=cartodb,dc=com
+objectClass: organizationalUnit
+ou: groups
+
+#ldap_conn_user
+dn: cn=ldap_conn_user,dc=cartodb,dc=com
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: ldap_conn_user
+description: CartoDB LDAP conn_user
+userPassword: changeme
+ 

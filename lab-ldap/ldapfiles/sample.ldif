@@ -1,0 +1,7 @@
+# Sample User
+dn: userid=test_user,ou=users,dc=cartodb,dc=com
+userid: test_user
+cn: test_user
+username: test_user
+userpassword: changeme
+email: test_user@cartodb.com
