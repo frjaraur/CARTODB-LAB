@@ -55,6 +55,8 @@ Start_Postgresql(){
 		#createdb -E UTF8 template_postgis
 		#createlang -d template_postgis plpgsql
 		#psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis'"
+
+
 		
 			
 		gosu postgres createuser publicuser --no-createrole --no-createdb --no-superuser -U postgres
@@ -62,6 +64,9 @@ Start_Postgresql(){
 		gosu postgres createuser tileuser --no-createrole --no-createdb --no-superuser -U postgres
 			
 		gosu postgres createdb -T template0 -O postgres -U postgres -E UTF8 template_postgis
+		#gosu postgres createdb -O postgres -U postgres -E UTF8 template_postgis
+		gosu postgres psql -U postgres template_postgis -c 'CREATE EXTENSION postgis;'
+		gosu postgres psql -U postgres template_postgis -c 'CREATE EXTENSION postgis_topology;'
 		
 		gosu postgres psql -U postgres template_postgis -c 'CREATE OR REPLACE LANGUAGE plpgsql;'
 		gosu postgres psql -d postgres -c "UPDATE pg_database SET datistemplate='true' WHERE datname='template_postgis';"
@@ -102,13 +107,6 @@ Start_Postgresql(){
 
 }
 
-
-Setup_CartoDB_Environment(){
-	cd ${CARTODBMAIN}
-	
-}
-
-
 Start_CartoDB(){
 	cd ${CARTODBMAIN}
 	echo "Starting CARTODB ...."			
@@ -118,12 +116,23 @@ Start_CartoDB(){
 
 
 Start_SQLAPI(){		
+	
+	#if [ ! -f ${SQLAPI}/config/environments/${ENVIRONMENT}.js ]
+	#then 
+		#cat ${SQLAPI}/config/environments/${ENVIRONMENT}.js.example |sed -e"s/127\.0\.0\.1/${ENVIRONMENT}\.localhost\.lan/g" > ${SQLAPI}/config/environments/${ENVIRONMENT}.js
+	#fi
+	
+	
 	echo "Starting SQL API ...."
 	/usr/bin/node ${SQLAPI}/app.js ${ENVIRONMENT} &
 	echo
 }
 
 Start_MAPSAPI(){	
+	#if [ ! -f ${MAPAPI}/config/environments/${ENVIRONMENT}.js ]
+	#then 
+		#cat ${MAPAPI}/config/environments/${ENVIRONMENT}.js.example |sed -e"s/127\.0\.0\.1/${ENVIRONMENT}\.localhost\.lan/g" > ${MAPAPI}/config/environments/${ENVIRONMENT}.js
+	#fi
 	echo "Starting MAPS API ...."
 	/usr/bin/node ${MAPAPI}/app.js ${ENVIRONMENT} &
 	echo 
@@ -134,17 +143,19 @@ Setup_CartoDB(){
 	cd ${CARTODBMAIN}
 	echo "First RUN ...."
 	
+	#cat config/app_config.yml.sample |sed -e"s/127\.0\.0\.1/${ENVIRONMENT}/g" > config/app_config.yml
 	
+	#cat config/database.yml.sample |sed -e"s/127\.0\.0\.1/${ENVIRONMENT}/g" > config/database.yml
 		
 	export PASSWORD="changeme"
 	export ADMIN_PASSWORD="changeme"
 	export EMAIL="dummy@dummy.me"
 	export USER="dummy"
-	export SUBDOMAIN=$USER
+	export SUBDOMAIN=$ENVIRONMENT
 
 		
 	echo "PASSWORD: $PASSWORD"
-	echo "ADMIN_PASSWORD: $ADMIN_PASSWORD"
+	echo "ADMIN_PASSWORD: ${ADMIN_PASSWORD}"
 	echo "EMAIL: $EMAIL"
 		
     # Add entries to /etc/hosts needed in development
@@ -154,13 +165,23 @@ Setup_CartoDB(){
 	echo "Creating Development User ...."
 	
 	bundle exec rake rake:db:create
+	sleep 10
 	bundle exec rake rake:db:migrate
+	sleep 10
 	bundle exec rake cartodb:db:create_publicuser
+	sleep 10
 	bundle exec rake cartodb:db:create_dev_user SUBDOMAIN="${SUBDOMAIN}" \
 	PASSWORD="${PASSWORD}" ADMIN_PASSWORD="${ADMIN_PASSWORD}" \
 	EMAIL="${EMAIL}"
+	sleep 10
 	bundle exec rake cartodb:db:create_importer_schema
+	sleep 10
 	bundle exec rake cartodb:db:load_functions
+	sleep 10
+	
+	[ "$ORGANIZATION_ID" = "" ] && ORGANIZATION_ID=$(echo cartodb | md5sum|awk '{ print $1 }') && export ORGANIZATION_ID
+	bundle exec rake cartodb:ldap:create_ldap_configuration
+	sleep 10
 	
 }
 
@@ -188,10 +209,10 @@ case ${ACTION} in
 	start_all)
 	
 		Start_Postgresql
-		sleep 20
+		sleep 5
 		
 		Start_Redis
-		sleep 20
+		sleep 5
 		
 		Setup_CartoDB
 		
