@@ -40,4 +40,4 @@ cat /tmp/.changerootpasswd_step2.ldif
 echo "ROOTDN ${ROOTDN}"
 /usr/bin/ldapmodify -H ldap:// -x -D "${ROOTDN}" -W -f  /tmp/.changerootpasswd_step2.ldif
 
-#rm -f  /tmp/.changerootpasswd_step2.ldif  /tmp/.changerootpasswd_step1.ldif /tmp/.newpasswd /tmp/.actualroot.ldif
+rm -f  /tmp/.changerootpasswd_step2.ldif  /tmp/.changerootpasswd_step1.ldif /tmp/.newpasswd /tmp/.actualroot.ldif

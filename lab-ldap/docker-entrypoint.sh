@@ -53,12 +53,13 @@ case $ACTION in
 	;;	
 	
 	recreatedb)
-		/ldap_utils/recreate_ldap.sh
+		/ldap_utils/recreateldap.sh
 		[ -f $LDAPDATA/.changed ] && rm -f $LDAPDATA/.changed
 		/ldap_utils/changeme.sh
 		touch $LDAPDATA/.changed
 		
 	;;
+	
 	*)	
 		exec "$@"
 	;;

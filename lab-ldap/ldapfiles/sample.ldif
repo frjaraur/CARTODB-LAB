@@ -1,7 +1,7 @@
 # Sample User
-dn: userid=test_user,ou=users,dc=cartodb,dc=com
-userid: test_user
+dn: user_id=test_user,ou=users,dc=cartodb,dc=com
 cn: test_user
-username: test_user
-userpassword: changeme
+user_id: test_user
+user_name: test_user
+user_password: changeme
 email: test_user@cartodb.com

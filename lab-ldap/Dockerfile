@@ -28,7 +28,7 @@ RUN apt-get update && \
 COPY ldapfiles/acls.ldif /ldap_utils/acls.ldif
 COPY ldapfiles/objects.ldif /ldap_utils/objects.ldif
 COPY ldapfiles/changeme.sh /ldap_utils/changeme.sh
-COPY ldapfiles/recreate_ldap.sh /ldap_utils/recreate_ldap.sh
+COPY ldapfiles/recreateldap.sh /ldap_utils/recreateldap.sh
 COPY ldapfiles/supervisord.conf /etc/supervisor/supervisord.conf
 
 
