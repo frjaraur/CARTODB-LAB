@@ -31,6 +31,11 @@ COPY ldapfiles/changeme.sh /ldap_utils/changeme.sh
 COPY ldapfiles/recreateldap.sh /ldap_utils/recreateldap.sh
 COPY ldapfiles/supervisord.conf /etc/supervisor/supervisord.conf
 
+COPY ldapfiles/addldapuser.sh /ldap_utils/addldapuser.sh
+COPY ldapfiles/delldapuser.sh /ldap_utils/delldapuser.sh
+COPY ldapfiles/passwdldapuser.sh /ldap_utils/passwdldapuser.sh
+
+
 
 # Set OpenLDAP data and config directories in a data volume
 VOLUME ["$LDAPDATA", "/etc/ldap/slapd.d"]

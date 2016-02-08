@@ -1,5 +1,5 @@
 # Sample User
-dn: user_id=test_user,ou=users,dc=cartodb,dc=com
+dn: cn=test_user,ou=users,dc=cartodb,dc=com
 cn: test_user
 user_id: test_user
 user_name: test_user
