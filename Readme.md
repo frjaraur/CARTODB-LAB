@@ -4,13 +4,13 @@
 
 #################################################
 
-cd lab-ldap && docker build -t lab:ldap .
-
-cd lab-cartodb && docker build -t lab:cartodb .
-
+To build this lab just 
+git clone https://github.com/frjaraur/CARTODB-LAB.git
+docker build -t lab:ldap lab-ldap
+docker build -t lab:cartodb lab-cartodb
 docker run --name ldap -d lab:ldap daemon
+docker run --name cartodb --link ldap:ldap lab:cartodb
 
-docker run --name cartodb --link ldap:ldap  lab:cartodb
 
 
 Verify running ldap users:
